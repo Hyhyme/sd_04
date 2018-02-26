@@ -21,7 +21,7 @@ def fill_collection():
     movie_data = r.json()
     # fill the collection
     for document in movie_data:
-        movies.insert_one(collection)
+        collection.insert_one(collection)
 
 
 # returns a list of movies with the given title
