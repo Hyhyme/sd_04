@@ -6,7 +6,7 @@
 '''
 
 
-import pymongo, requests
+import pymongo, json
 
 
 # create/connect to the database, then create/connect to the collection
@@ -16,17 +16,15 @@ collection = db[ "movies" ]
 
 # fills the collection with the data
 def fill_collection():
-    # request the data
-    r = requests.get("https://raw.githubusercontent.com/prust/wikipedia-movie-data/master/movies.json")
-    movie_data = r.json()
+    data = json.load( open( 'movies.json' ) )
     # fill the collection
-    for document in movie_data:
-        collection.insert_one(collection)
+    for document in data:
+        collection.insert_one( document )
 
-
+        
 # returns a list of movies with the given title
 def by_title(title):
-    cursor = movies.find( {"title" : title} )
+    cursor = collection.find( {"title" : title} )
     movie_list = list()
     for movie in cursor:
         movie_list.append(movie)
@@ -35,7 +33,7 @@ def by_title(title):
 
 # returns a list of movies made in the given year
 def by_year(year):
-    cursor = movies.find( {"year" : year} )
+    cursor = collection.find( {"year" : year} )
     movie_list = list()
     for movie in cursor:
         movie_list.append(movie)
@@ -44,7 +42,7 @@ def by_year(year):
 
 # returns a list of movies from the given genre
 def by_genre(genre):
-    cursor = movies.find( {"genre" : genre} )
+    cursor = collection.find( {"genre" : genre} )
     movie_list = list()
     for movie in cursor:
         movie_list.append(movie)
@@ -53,7 +51,7 @@ def by_genre(genre):
 
 # returns a list of movies made in the given year from the given genre
 def by_year_genre(year, genre):
-    cursor = movies.find( {"year" : year, "genre" : genre} )
+    cursor = collection.find( {"year" : year, "genre" : genre} )
     movie_list = list()
     for movie in cursor:
         movie_list.append(movie)
@@ -69,4 +67,4 @@ print by_year(2012)
 print "Searching by genre for \"Comedy\""
 print by_genre("Comedy")
 print "Searching by year and genre for 2012 and \"Comedy\""
-print by_year_genre(2012, Comdey)
+print by_year_genre(2012, 'Comedy')
